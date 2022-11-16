@@ -84,6 +84,16 @@ func valueOfHebLetter(hebl string) int {
 		return 300
 	case "ת":
 		return 400
+	case "ם":
+		return 40
+	case "ן":
+		return 50
+	case "ץ":
+		return 90
+	case "ף":
+		return 80
+	case "ך":
+		return 20
 	default:
 		return 0
 	}
