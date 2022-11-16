@@ -13,11 +13,33 @@ import (
 	"time"
 )
 
+//////////////////////////
+// https://stackoverflow.com/a/49373646
+
+var EventTypes = eventTypesRegistry()
+
+func eventTypesRegistry() *eventTypeRegistry {
+	return &eventTypeRegistry{
+		Birth:   "birth",
+		Wedding: "wedding",
+		Death:   "death",
+	}
+}
+
+type eventTypeRegistry struct {
+	Birth   string
+	Wedding string
+	Death   string
+}
+
+/////////////
+
 type birthday struct {
-	name  string
-	year  int
-	month string
-	day   int
+	name      string
+	year      int
+	month     string
+	day       int
+	typeEvent string
 }
 
 func main() {
@@ -27,7 +49,16 @@ func main() {
 	yearsAhead := viperEnvVariableInt("YEARS_AHEAD")
 	calId := viperEnvVariableStr("CALENDAR_ID")
 
+	if *csvPath != "" {
+		records := readCsvFile(*csvPath)
+		iterateEvents(records, calId, yearsAhead)
+	} else {
 	hebBirthday := getDetailsFromUser()
+		writeEvents(yearsAhead, hebBirthday, calId)
+	}
+}
+
+func writeEvents(yearsAhead int, hebBirthday birthday, calId string) {
 	currHebYear := calcCurrHebYear()
 
 	for hebYear := currHebYear; hebYear < currHebYear+yearsAhead; hebYear++ {
@@ -48,6 +79,7 @@ var (
 	month     = flag.String("month", "", "Nisan, Iyyar, Sivan, Tamuz, Av, Elul, Tishrei, Cheshvan, Kislev, Tevet, Shvat, Adar, Adar1, Adar2")
 	day       = flag.Int("day", -1, "day")
 	name      = flag.String("name", "", "the name")
+	csvPath   = flag.String("csvPath", "", "path for csv file (day, month, year, name) comma delimiter")
 )
 
 func getDetailsFromUser() birthday {
