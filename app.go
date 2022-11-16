@@ -1,11 +1,3 @@
-// todo - features:
-// add age (by birth year)
-// set reminders a week before (make configurable by user input)
-// gui
-// additional kinds of events (wedding, death, free text)
-// input list from file
-// write to specific secondary calendar - get by args
-
 package main
 
 import (
